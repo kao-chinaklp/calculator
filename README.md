@@ -1,1 +1,1 @@
-calculator
+This is a little calculator.
