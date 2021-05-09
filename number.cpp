@@ -8,8 +8,8 @@ void complement(number* a, int len) {
 bool compare(number a, number b) {
 	if (a.len < b.len)complement(&a, b.len - a.len);
 	if (a.len > b.len)complement(&b, a.len - b.len);
-	while (a.len > 1 && a.num[a.len - 1] == 0)a.len--;
-	while (b.len > 1 && b.num[b.len - 1] == 0)b.len--;
+	while (a.len > 1 && a.num[static_cast<unsigned __int64>(a.len) - 1] == 0)a.len--;
+	while (b.len > 1 && b.num[static_cast<unsigned __int64>(b.len) - 1] == 0)b.len--;
 	if (a.len < b.len)return true;
 	if (a.len > b.len)return false;
 	for (int i = (int)a.num.size() - 1; i >= 0; i--) {
@@ -18,90 +18,87 @@ bool compare(number a, number b) {
 	}
 	return false;
 }
-number &number::operator+(number b) {
-	number c;
-	if (this->negative)
+number number::operator+(number b) {
+	number a = *this, c;
+	if (a.negative)
 		if (b.negative)
 			c.negative = true;
 		else {
-			this->negative = false;
-			return b - *this;
+			a.negative = false;
+			return b - a;
 		}
 	else
 		if (b.negative) {
 			b.negative = false;
-			return *this - b;
+			return a - b;
 		}
-	if (this->len < b.len)complement(this, b.len - this->len);
-	if (this->len > b.len)complement(&b, this->len - b.len);
-	c.len = max(this->len, b.len);
+	if (a.len < b.len)complement(&a, b.len - a.len);
+	if (a.len > b.len)complement(&b, a.len - b.len);
+	c.len = max(a.len, b.len);
 	c.num.resize(c.len);
 	int t = 0;
 	for (int i = 0; i < c.len; i++) {
-		c.num[i] = this->num[i] + b.num[i] + t;
+		c.num[i] = a.num[i] + b.num[i] + t;
 		t = c.num[i] / 10;
 		c.num[i] %= 10;
 	}
 	if (t)c.num.push_back(t), c.len++;
-	*this = c;
-	return *this;
+	return c;
 }
-number &number::operator-(number b) {
-	number c;
-	if (this->negative)
+number number::operator-(number b) {
+	number a = *this, c;
+	if (a.negative)
 		if (b.negative) {
-			this->negative = b.negative = false;
-			swap(*this, b);
+			a.negative = b.negative = false;
+			swap(a, b);
 		}
 		else {
-			this->negative = false;
-			c = *this + b;
+			a.negative = false;
+			c = a + b;
 			c.negative = true;
-			*this = c;
-			return *this;
+			return c;
 		}
 	else
 		if (b.negative) {
 			b.negative = false;
-			return *this + b;
+			return a + b;
 		}
-	if (this->len < b.len)complement(this, b.len - this->len);
-	if (this->len > b.len)complement(&b, this->len - b.len);
-	if (compare(*this, b)) {
+	if (a.len < b.len)complement(&a, b.len - a.len);
+	if (a.len > b.len)complement(&b, a.len - b.len);
+	if (compare(a, b)) {
 		c.negative = true;
-		swap(*this, b);
+		swap(a, b);
 	}
-	c.len = max(this->len, b.len);
+	c.len = max(a.len, b.len);
 	c.num.resize(c.len);
 	for (int i = 0; i < c.len; i++) {
-		if (this->num[i] < b.num[i]) {
-			this->num[i + 1]--;
-			this->num[i] += 10;
+		if (a.num[i] < b.num[i]) {
+			a.num[static_cast<unsigned __int64>(i) + 1]--;
+			a.num[i] += 10;
 		}
-		c.num[i] = this->num[i] - b.num[i];
+		c.num[i] = a.num[i] - b.num[i];
 	}
-	while (c.len > 1 && c.num[c.len - 1] == 0) {
+	while (c.len > 1 && c.num[static_cast<unsigned __int64>(c.len) - 1] == 0) {
 		c.len--;
 		c.num.pop_back();
 	}
-	*this = c;
-	return *this;
+	return c;
 }
-number &number::operator*(number b) {
-	number c;
-	if (this->negative && !b.negative) {
-		this->negative = false;
+number number::operator*(number b) {
+	number a = *this, c;
+	if (a.negative && !b.negative) {
+		a.negative = false;
 		c.negative = true;
 	}
-	if (!this->negative && b.negative) {
+	if (!a.negative && b.negative) {
 		b.negative = false;
 		c.negative = true;
 	}
-	c.len = this->len + b.len;
+	c.len = a.len + b.len;
 	c.num.resize(c.len);
-	for (int i = 0; i < this->len; i++)
+	for (int i = 0; i < a.len; i++)
 		for (int j = 0; j < b.len; j++)
-			c.num[i + j] += this->num[i] * b.num[j];
+			c.num[static_cast<unsigned __int64>(i) + j] += a.num[i] * b.num[j];
 	int t = 0;
 	for (int i = 0; i < c.len; i++) {
 		c.num[i] += t;
@@ -114,66 +111,64 @@ a1:
 		t /= 10;
 		goto a1;
 	}
-	while (c.len > 1 && c.num[c.len - 1] == 0) {
+	while (c.len > 1 && c.num[static_cast<unsigned __int64>(c.len) - 1] == 0) {
 		c.len--;
 		c.num.pop_back();
 	}
-	*this = c;
-	return *this;
+	return c;
 }
-number& number::operator/(number b) {
-	number c;
-	if (this->negative && !b.negative) {
-		this->negative = false;
+number number::operator/(number b) {
+	number a = *this, c;
+	if (a.negative && !b.negative) {
+		a.negative = false;
 		c.negative = true;
 	}
-	if (!this->negative && b.negative) {
+	if (!a.negative && b.negative) {
 		b.negative = false;
 		c.negative = true;
 	}
 	c.len = 1;
 	c.num.push_back(0);
-	if (this->len < b.len)complement(this, b.len - this->len);
-	if (this->len > b.len)complement(&b, this->len - b.len);
+	if (a.len < b.len)complement(&a, b.len - a.len);
+	if (a.len > b.len)complement(&b, a.len - b.len);
 	while (!compare(*this, b)) {
 		c.num[0]++;
 		for (int i = 0; i < c.len; i++) {
 			if (c.num[i] < 10)break;
 			c.num[i] %= 10;
 			if (i + 1 == c.len)c.num.push_back(0), c.len++;
-			c.num[i + 1]++;
+			c.num[static_cast<unsigned __int64>(i) + 1]++;
 		}
-		*this = *this - b;
+		a = a - b;
 	}
-	*this = c;
-	return *this;
+	return c;
 }
-number& number::operator%(number b) {
-	number c;
-	if (this->negative && !b.negative) {
-		this->negative = false;
+number number::operator%(number b) {
+	number a = *this, c;
+	if (a.negative && !b.negative) {
+		a.negative = false;
 		c.negative = true;
 	}
-	if (!this->negative && b.negative) {
+	if (!a.negative && b.negative) {
 		b.negative = false;
 		c.negative = true;
 	}
 	c.len = 1;
 	c.num.push_back(0);
-	if (this->len < b.len)complement(this, b.len - this->len);
-	if (this->len > b.len)complement(&b, this->len - b.len);
-	while (!compare(*this, b))
-		*this = *this - b;
-	return *this;
+	if (a.len < b.len)complement(&a, b.len - a.len);
+	if (a.len > b.len)complement(&b, a.len - b.len);
+	while (!compare(a, b))
+		a = a - b;
+	return a;
 }
-number& number::operator^(number b) {
-	number c, d, e;
+number number::operator^(number b) {
+	number a = *this, c, d, e;
 	d.len = 1;
 	d.num.push_back(2);
 	e = b;
 	d = e % d;
 	if (d.num[0] == 1)
-		this->negative = c.negative;
+		a.negative = c.negative;
 	c.len = 1;
 	c.num.push_back(1);
 	while (b.len != 1 || b.num[0] != 0) {
@@ -182,9 +177,9 @@ number& number::operator^(number b) {
 		for (int i = 0; i < b.len; i++) {
 			if (b.num[i] >= 0)break;
 			b.num[i] += 10;
-			b.num[i + 1]--;
+			b.num[static_cast<unsigned __int64>(i) + 1]--;
 		}
-		while (b.len > 1 && b.num[b.len - 1] == 0)b.len--, b.num.pop_back();
+		while (b.len > 1 && b.num[static_cast<unsigned __int64>(b.len) - 1] == 0)b.len--, b.num.pop_back();
 	}
 	*this = c;
 	return *this;

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="calculator.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="number.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -26,9 +23,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="calculator.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="number.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

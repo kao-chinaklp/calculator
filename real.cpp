@@ -63,13 +63,13 @@ void real::simplification() {
 	this->denominator = this->denominator / c;
 	this->numerator = this->numerator / c;
 }
-real& real::operator+(real b) {
-	real c;
+real real::operator+(real b) {
+	real a = *this, c;
 	if (this->negative)
 		if (b.negative)
 			c.negative = true;
 		else {
-			this->negative = false;
+			a.negative = false;
 			return b - *this;
 		}
 	else
@@ -78,25 +78,24 @@ real& real::operator+(real b) {
 			return *this - b;
 		}
 	number t;
-	t = gcd(this->denominator, b.denominator);
-	c.denominator = this->denominator * b.denominator / t;
-	this->numerator = this->numerator * (c.denominator / this->denominator);
+	t = gcd(a.denominator, b.denominator);
+	c.denominator = a.denominator * b.denominator / t;
+	a.numerator = a.numerator * (c.denominator / a.denominator);
 	b.numerator = b.numerator * (c.denominator / b.denominator);
-	this->denominator = b.denominator = c.denominator;
-	c.numerator = this->numerator + b.numerator;
+	a.denominator = b.denominator = c.denominator;
+	c.numerator = a.numerator + b.numerator;
 	c.simplification();
-	*this = c;
-	return *this;
+	return c;
 }
-real& real::operator-(real b) {
-	real c;
-	if (this->negative)
+real real::operator-(real b) {
+	real a = *this, c;
+	if (a.negative)
 		if (b.negative) {
-			this->negative = b.negative = false;
+			a.negative = b.negative = false;
 			swap(*this, b);
 		}
 		else {
-			this->negative = false;
+			a.negative = false;
 			c = *this + b;
 			c.negative = true;
 			*this = c;
@@ -108,39 +107,37 @@ real& real::operator-(real b) {
 			return *this + b;
 		}
 	number t;
-	t = gcd(this->denominator, b.denominator);
-	c.denominator = this->denominator * b.denominator / t;
-	this->numerator = this->numerator * (c.denominator / this->denominator);
+	t = gcd(a.denominator, b.denominator);
+	c.denominator = a.denominator * b.denominator / t;
+	a.numerator = a.numerator * (c.denominator / a.denominator);
 	b.numerator = b.numerator * (c.denominator / b.denominator);
-	this->denominator = b.denominator = c.denominator;
-	c.numerator = this->numerator - b.numerator;
+	a.denominator = b.denominator = c.denominator;
+	c.numerator = a.numerator - b.numerator;
 	c.simplification();
-	*this = c;
-	return *this;
+	return c;
 }
-real& real::operator*(real b) {
-	real c;
-	if (this->negative && !b.negative) {
-		this->negative = false;
+real real::operator*(real b) {
+	real a = *this, c;
+	if (a.negative && !b.negative) {
+		a.negative = false;
 		c.negative = true;
 	}
-	if (!this->negative && b.negative) {
+	if (!a.negative && b.negative) {
 		b.negative = false;
 		c.negative = true;
 	}
-	c.denominator = this->denominator * b.denominator;
-	c.numerator = this->numerator * b.numerator;
+	c.denominator = a.denominator * b.denominator;
+	c.numerator = a.numerator * b.numerator;
 	c.simplification();
-	*this = c;
-	return *this;
+	return c;
 }
-real& real::operator/(real b) {
-	real c;
-	if (this->negative && !b.negative) {
-		this->negative = false;
+real real::operator/(real b) {
+	real a = *this, c;
+	if (a.negative && !b.negative) {
+		a.negative = false;
 		c.negative = true;
 	}
-	if (!this->negative && b.negative) {
+	if (!a.negative && b.negative) {
 		b.negative = false;
 		c.negative = true;
 	}
@@ -149,8 +146,9 @@ real& real::operator/(real b) {
 	*this = c;
 	return *this;
 }
-real& real::operator^(real b) {
-	if (b.negative)swap(this->denominator, this->numerator);
+real real::operator^(real b) {
+	real a = *this;
+	if (b.negative)swap(a.denominator, a.numerator);
 	real c, e = b, f;
 	number d;
 	f.denominator.len = 1;
@@ -159,7 +157,7 @@ real& real::operator^(real b) {
 	f.numerator.num.push_back(2);
 	d = (e.numerator / e.denominator) % (f.numerator / f.denominator);
 	if (d.num[0] == 1)
-		c.negative = this->negative;
+		c.negative = a.negative;
 	d = (f.numerator / f.denominator);
 	while (d.len != 1 || d.num[0] != 0) {
 		c = c * (*this);
@@ -167,10 +165,9 @@ real& real::operator^(real b) {
 		for (int i = 0; i < d.len; i++) {
 			if (d.num[i] >= 0)break;
 			d.num[i] += 10;
-			d.num[i + 1]--;
+			d.num[static_cast<unsigned __int64>(i) + 1]--;
 		}
-		while (d.len > 1 && d.num[d.len - 1] == 0)d.len--, d.num.pop_back();
+		while (d.len > 1 && d.num[static_cast<unsigned __int64>(d.len) - 1] == 0)d.len--, d.num.pop_back();
 	}
-	*this = c;
-	return *this;
+	return c;
 }

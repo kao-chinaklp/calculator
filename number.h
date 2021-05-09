@@ -19,7 +19,7 @@ public:
 		this->len = (int)s.size();
 		this->num.resize(this->len);
 		for (int i = this->len - 1; i >= 0; i--)
-			this->num[this->len - i - 1] = s[i] - 48;
+			this->num[static_cast<unsigned __int64>(this->len) - i - 1] = s[i] - 48;
 	}
 	void showNum() {
 		if (this->negative)
@@ -28,12 +28,12 @@ public:
 			printf("%d", this->num[i]);
 		//printf("\n");
 	}
-	number& operator+(number b);
-	number& operator-(number b);
-	number& operator*(number b);
-	number& operator/(number b);
-	number& operator%(number b);
-	number& operator^(number b);
+	number operator+(number b);
+	number operator-(number b);
+	number operator*(number b);
+	number operator/(number b);
+	number operator%(number b);
+	number operator^(number b);
 
 private:
 

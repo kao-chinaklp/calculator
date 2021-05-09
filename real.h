@@ -12,10 +12,10 @@ public:
 	void getNum(std::string s);
 	void showNum();
 	void simplification();
-	real& operator+(real b);
-	real& operator-(real b);
-	real& operator*(real b);
-	real& operator/(real b);
-	real& operator^(real b);
+	real operator+(real b);
+	real operator-(real b);
+	real operator*(real b);
+	real operator/(real b);
+	real operator^(real b);
 };
 #endif // !REAL_H
