@@ -4,7 +4,7 @@ using namespace std;
 void complement(number* a, int len) {
 	for (; len > 0; len--)
 		a->num.push_back(0), a->len++;
-}
+}//²¹Áã
 bool compare(number a, number b) {
 	if (a.len < b.len)complement(&a, b.len - a.len);
 	if (a.len > b.len)complement(&b, a.len - b.len);
@@ -17,7 +17,7 @@ bool compare(number a, number b) {
 		if (a.num[i] > b.num[i])return false;
 	}
 	return false;
-}
+}//a<b ·µ»Øtrue £» a>=b ·µ»Øfalse
 number number::operator+(number b) {
 	number a = *this, c;
 	if (a.negative)

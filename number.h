@@ -8,9 +8,9 @@ class number
 {
 public:
 	number() :len(0), negative(false) { num.clear(); };
-	int len;
-	bool negative;
-	std::vector<int>num;
+	int len;//整数位数
+	bool negative;//负号
+	std::vector<int>num;//本体
 	void getNum(std::string s) {
 		if (s[0] == '-') {
 			this->negative = true;

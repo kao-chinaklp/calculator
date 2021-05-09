@@ -6,7 +6,7 @@ using namespace std;
 number gcd(number a, number b) {
 	if (b.len == 1 && b.num[0] == 0)return a;
 	else return gcd(b, a % b);
-}
+}//求最大公约数
 void real::getNum(string s) {
 	if (s[0] == '-')this->negative = true, s.erase(0, 1);
 	int decimal_point = s.find('.');
@@ -62,7 +62,7 @@ void real::simplification() {
 	c = gcd(this->denominator, this->numerator);
 	this->denominator = this->denominator / c;
 	this->numerator = this->numerator / c;
-}
+}//约分化简
 real real::operator+(real b) {
 	real a = *this, c;
 	if (this->negative)
@@ -170,4 +170,63 @@ real real::operator^(real b) {
 		while (d.len > 1 && d.num[static_cast<unsigned __int64>(d.len) - 1] == 0)d.len--, d.num.pop_back();
 	}
 	return c;
+}
+void real::operator++(int) {
+	this->numerator = this->denominator + this->numerator;
+	if (!this->numerator.negative)
+		if (!this->denominator.negative)this->negative = false;//同是正，得正
+		else {
+			//前正后负，得负
+			this->denominator.negative = false;
+			this->negative = true;
+		}
+	else
+		if (!this->denominator.negative) {
+			//前负后正，得负
+			this->numerator.negative = false;
+			this->negative = true;
+		}
+		else {
+			//同是负，得负
+			this->denominator.negative = this->numerator.negative = false;
+			this->negative = true;
+		}
+}
+void real::operator--(int) {
+	this->numerator = this->denominator - this->numerator;
+	if (!this->numerator.negative)
+		if (!this->denominator.negative)this->negative = false;//同是正，得正
+		else {
+			//前正后负，得负
+			this->denominator.negative = false;
+			this->negative = true;
+		}
+	else
+		if (!this->denominator.negative) {
+			//前负后正，得负
+			this->numerator.negative = false;
+			this->negative = true;
+		}
+		else {
+			//同是负，得负
+			this->denominator.negative = this->numerator.negative = false;
+			this->negative = true;
+		}
+}
+real real::operator=(real a) {
+	this->denominator = a.denominator;
+	this->negative = a.negative;
+	this->numerator = a.numerator;
+	return *this;
+}
+real real::operator=(int a) {
+	real b;
+	string s;
+	while (a > 0) {
+		s = char(a % 10 - 48) + s;
+		a /= 10;
+	}
+	if (a < 0)s = "-" + s;
+	b.getNum(s);
+	return b;
 }

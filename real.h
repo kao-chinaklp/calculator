@@ -6,9 +6,9 @@
 class real {
 public:
 	real() :negative(false) {};
-	number numerator;
-	number denominator;
-	bool negative;
+	number numerator;//分子
+	number denominator;//分母
+	bool negative;//负号
 	void getNum(std::string s);
 	void showNum();
 	void simplification();
@@ -17,5 +17,9 @@ public:
 	real operator*(real b);
 	real operator/(real b);
 	real operator^(real b);
+	void operator++(int);
+	void operator--(int);
+	real operator=(real a);
+	real operator=(int a);
 };
 #endif // !REAL_H
