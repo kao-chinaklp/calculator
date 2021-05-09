@@ -132,13 +132,7 @@ number number::operator/(number b) {
 	if (a.len < b.len)complement(&a, b.len - a.len);
 	if (a.len > b.len)complement(&b, a.len - b.len);
 	while (!compare(*this, b)) {
-		c.num[0]++;
-		for (int i = 0; i < c.len; i++) {
-			if (c.num[i] < 10)break;
-			c.num[i] %= 10;
-			if (i + 1 == c.len)c.num.push_back(0), c.len++;
-			c.num[static_cast<unsigned __int64>(i) + 1]++;
-		}
+		c++;
 		a = a - b;
 	}
 	return c;
@@ -172,15 +166,29 @@ number number::operator^(number b) {
 	c.len = 1;
 	c.num.push_back(1);
 	while (b.len != 1 || b.num[0] != 0) {
-		c = c * (*this);
-		b.num[0]--;
-		for (int i = 0; i < b.len; i++) {
-			if (b.num[i] >= 0)break;
-			b.num[i] += 10;
-			b.num[static_cast<unsigned __int64>(i) + 1]--;
-		}
+		c = c * a;
+		b--;
 		while (b.len > 1 && b.num[static_cast<unsigned __int64>(b.len) - 1] == 0)b.len--, b.num.pop_back();
 	}
-	*this = c;
-	return *this;
+	return c;
+}
+number radical(number a, number b) {
+	number c;
+	c.len = 1;
+	c.num.push_back(0);
+	while (!compare(a, c ^ b)) c++;
+	c--;
+	return c;
+}
+void number::operator++(int) {
+	number a;
+	a.num.push_back(1);
+	a.len = 1;
+	*this = *this + a;
+}
+void number::operator--(int) {
+	number a;
+	a.num.push_back(1);
+	a.len = 1;
+	*this = *this - a;
 }
