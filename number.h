@@ -36,6 +36,12 @@ public:
 	number operator^(number b);
 	void operator++(int);
 	void operator--(int);
+	void operator+=(number b);
+	void operator-=(number b);
+	void operator*=(number b);
+	void operator/=(number b);
+	void operator%=(number b);
+	void operator=(int a);
 
 private:
 

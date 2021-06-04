@@ -60,8 +60,8 @@ void real::showNum() {
 void real::simplification() {
 	number c;
 	c = gcd(this->denominator, this->numerator);
-	this->denominator = this->denominator / c;
-	this->numerator = this->numerator / c;
+	this->denominator /= c;
+	this->numerator /= c;
 }//Ô¼·Ö»¯¼ò
 real real::operator+(real b) {
 	real a = *this, c;
@@ -70,18 +70,18 @@ real real::operator+(real b) {
 			c.negative = true;
 		else {
 			a.negative = false;
-			return b - *this;
+			return b - a;
 		}
 	else
 		if (b.negative) {
 			b.negative = false;
-			return *this - b;
+			return a - b;
 		}
 	number t;
 	t = gcd(a.denominator, b.denominator);
 	c.denominator = a.denominator * b.denominator / t;
-	a.numerator = a.numerator * (c.denominator / a.denominator);
-	b.numerator = b.numerator * (c.denominator / b.denominator);
+	a.numerator *= (c.denominator / a.denominator);
+	b.numerator *= (c.denominator / b.denominator);
 	a.denominator = b.denominator = c.denominator;
 	c.numerator = a.numerator + b.numerator;
 	c.simplification();
@@ -92,25 +92,25 @@ real real::operator-(real b) {
 	if (a.negative)
 		if (b.negative) {
 			a.negative = b.negative = false;
-			swap(*this, b);
+			swap(a, b);
 		}
 		else {
 			a.negative = false;
-			c = *this + b;
+			c = a + b;
 			c.negative = true;
-			*this = c;
-			return *this;
+			a = c;
+			return a;
 		}
 	else
 		if (b.negative) {
 			b.negative = false;
-			return *this + b;
+			return a + b;
 		}
 	number t;
 	t = gcd(a.denominator, b.denominator);
 	c.denominator = a.denominator * b.denominator / t;
-	a.numerator = a.numerator * (c.denominator / a.denominator);
-	b.numerator = b.numerator * (c.denominator / b.denominator);
+	a.numerator *= (c.denominator / a.denominator);
+	b.numerator *= (c.denominator / b.denominator);
 	a.denominator = b.denominator = c.denominator;
 	c.numerator = a.numerator - b.numerator;
 	c.simplification();
@@ -142,25 +142,22 @@ real real::operator/(real b) {
 		c.negative = true;
 	}
 	swap(b.denominator, b.numerator);
-	c = *this * b;
-	*this = c;
-	return *this;
+	c = a * b;
+	return c;
 }
 real real::operator^(real b) {
 	real a = *this;
 	if (b.negative)swap(a.denominator, a.numerator);
 	real c, e = b, f;
 	number d;
-	f.denominator.len = 1;
-	f.denominator.num.push_back(1);
-	f.numerator.len = 1;
-	f.numerator.num.push_back(2);
+	f.denominator = 1;
+	f.numerator = 2;
 	d = (e.numerator / e.denominator) % (f.numerator / f.denominator);
 	if (d.num[0] == 1)
 		c.negative = a.negative;
 	d = (f.numerator / f.denominator);
 	while (d.len != 1 || d.num[0] != 0) {
-		c = c * (*this);
+		c *= a;
 		d.num[0]--;
 		for (int i = 0; i < d.len; i++) {
 			if (d.num[i] >= 0)break;
@@ -191,6 +188,7 @@ void real::operator++(int) {
 			this->denominator.negative = this->numerator.negative = false;
 			this->negative = true;
 		}
+	this->simplification();
 }
 void real::operator--(int) {
 	this->numerator = this->denominator - this->numerator;
@@ -212,6 +210,7 @@ void real::operator--(int) {
 			this->denominator.negative = this->numerator.negative = false;
 			this->negative = true;
 		}
+	this->simplification();
 }
 real real::operator=(real a) {
 	this->denominator = a.denominator;
@@ -229,4 +228,20 @@ real real::operator=(int a) {
 	if (a < 0)s = "-" + s;
 	b.getNum(s);
 	return b;
+}
+void real::operator+=(real b) {
+	real a = *this;
+	*this = a + b;
+}
+void real::operator-=(real b) {
+	real a = *this;
+	*this = a - b;
+}
+void real::operator*=(real b) {
+	real a = *this;
+	*this = a * b;
+}
+void real::operator/=(real b) {
+	real a = *this;
+	*this = a / b;
 }

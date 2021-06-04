@@ -192,3 +192,30 @@ void number::operator--(int) {
 	a.len = 1;
 	*this = *this - a;
 }
+void number::operator+=(number b) {
+	number a = *this;
+	*this = a + b;
+}
+void number::operator-=(number b) {
+	number a = *this;
+	*this = a - b;
+}
+void number::operator*=(number b) {
+	number a = *this;
+	*this = a * b;
+}
+void number::operator/=(number b) {
+	number a = *this;
+	*this = a / b;
+}
+void number::operator%=(number b) {
+	number a = *this;
+	*this = a % b;
+}
+void number::operator=(int a) {
+	while (a) {
+		this->num.push_back(a % 10);
+		this->len++;
+		a /= 10;
+	}
+}

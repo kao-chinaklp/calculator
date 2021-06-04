@@ -21,5 +21,9 @@ public:
 	void operator--(int);
 	real operator=(real a);
 	real operator=(int a);
+	void operator+=(real b);
+	void operator-=(real b);
+	void operator*=(real b);
+	void operator/=(real b);
 };
 #endif // !REAL_H
