@@ -58,6 +58,10 @@ void real::showNum() {
 	printf(" ");
 }
 void real::simplification() {
+	if (this->numerator == 0) {
+		this->denominator = 1;
+		return;
+	}
 	number c;
 	c = gcd(this->denominator, this->numerator);
 	this->denominator /= c;
@@ -218,16 +222,25 @@ real real::operator=(real a) {
 	this->numerator = a.numerator;
 	return *this;
 }
-real real::operator=(int a) {
-	real b;
-	string s;
-	while (a > 0) {
-		s = char(a % 10 - 48) + s;
-		a /= 10;
+void real::operator=(double a) {
+	string s, t;
+	int b = a;
+	while (b > 0) {
+		t = t + char(b % 10);
+		b /= 10;
 	}
-	if (a < 0)s = "-" + s;
-	b.getNum(s);
-	return b;
+	reverse(s.begin(), s.end());
+	if (b < 0)s = "-" + s;
+	a = abs(a);
+	if (abs(b - a) > 0) {
+		a = b - a;
+		s = s + ".";
+		while (a > 0) {
+			s = s + char(int(a * 10));
+			a = a * 10 - int(a * 10);
+		}
+	}
+	this->getNum(s);
 }
 void real::operator+=(real b) {
 	real a = *this;
@@ -244,4 +257,25 @@ void real::operator*=(real b) {
 void real::operator/=(real b) {
 	real a = *this;
 	*this = a / b;
+}
+bool real::operator<(real a) {
+	real b;
+	b = *this - a;
+	if (b.negative)return true;
+	return false;
+}
+bool real::operator>(real a) {
+	real b;
+	b = *this - a;
+	if (!b.negative)return true;
+	return false;
+}
+bool real::operator==(real a) {
+	real b;
+	b = *this - a;
+	if (b.numerator == 0)return true;
+	return false;
+}
+bool real::operator!=(real a) {
+	return !(*this == a);
 }

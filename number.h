@@ -42,6 +42,14 @@ public:
 	void operator/=(number b);
 	void operator%=(number b);
 	void operator=(int a);
+	bool operator>(number a);
+	bool operator<(number a);
+	bool operator==(number a);
+	bool operator!=(number a);
+	bool operator>(int a);
+	bool operator<(int a);
+	bool operator==(int a);
+	bool operator!=(int a);
 
 private:
 

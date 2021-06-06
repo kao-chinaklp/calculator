@@ -20,10 +20,14 @@ public:
 	void operator++(int);
 	void operator--(int);
 	real operator=(real a);
-	real operator=(int a);
+	void operator=(double a);
 	void operator+=(real b);
 	void operator-=(real b);
 	void operator*=(real b);
 	void operator/=(real b);
+	bool operator<(real a);
+	bool operator>(real a);
+	bool operator==(real a);
+	bool operator!=(real a);
 };
 #endif // !REAL_H

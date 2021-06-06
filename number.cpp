@@ -5,19 +5,6 @@ void complement(number* a, int len) {
 	for (; len > 0; len--)
 		a->num.push_back(0), a->len++;
 }//²¹Áã
-bool compare(number a, number b) {
-	if (a.len < b.len)complement(&a, b.len - a.len);
-	if (a.len > b.len)complement(&b, a.len - b.len);
-	while (a.len > 1 && a.num[static_cast<unsigned __int64>(a.len) - 1] == 0)a.len--;
-	while (b.len > 1 && b.num[static_cast<unsigned __int64>(b.len) - 1] == 0)b.len--;
-	if (a.len < b.len)return true;
-	if (a.len > b.len)return false;
-	for (int i = (int)a.num.size() - 1; i >= 0; i--) {
-		if (a.num[i] < b.num[i])return true;
-		if (a.num[i] > b.num[i])return false;
-	}
-	return false;
-}//a<b ·µ»Øtrue £» a>=b ·µ»Øfalse
 number number::operator+(number b) {
 	number a = *this, c;
 	if (a.negative)
@@ -65,7 +52,7 @@ number number::operator-(number b) {
 		}
 	if (a.len < b.len)complement(&a, b.len - a.len);
 	if (a.len > b.len)complement(&b, a.len - b.len);
-	if (compare(a, b)) {
+	if (a > b) {
 		c.negative = true;
 		swap(a, b);
 	}
@@ -131,7 +118,7 @@ number number::operator/(number b) {
 	c.num.push_back(0);
 	if (a.len < b.len)complement(&a, b.len - a.len);
 	if (a.len > b.len)complement(&b, a.len - b.len);
-	while (!compare(*this, b)) {
+	while (a > b) {
 		c++;
 		a = a - b;
 	}
@@ -151,7 +138,7 @@ number number::operator%(number b) {
 	c.num.push_back(0);
 	if (a.len < b.len)complement(&a, b.len - a.len);
 	if (a.len > b.len)complement(&b, a.len - b.len);
-	while (!compare(a, b))
+	while (a > b)
 		a = a - b;
 	return a;
 }
@@ -176,7 +163,7 @@ number radical(number a, number b) {
 	number c;
 	c.len = 1;
 	c.num.push_back(0);
-	while (!compare(a, c ^ b)) c++;
+	while (a > (c ^ b)) c++;
 	c--;
 	return c;
 }
@@ -218,4 +205,47 @@ void number::operator=(int a) {
 		this->len++;
 		a /= 10;
 	}
+}
+bool number::operator>(number a) {
+	if (this->len > a.len)return true;
+	if (this->len < a.len)return false;
+	for (int i = static_cast<unsigned __int64>(a.len) - 1; i >= 0; i--)
+		if (this->num[i] <= a.num[i])return false;
+	return true;
+}
+bool number::operator<(number a) {
+	if (this->len < a.len)return true;
+	if (this->len > a.len)return false;
+	for (int i = static_cast<unsigned __int64>(a.len) - 1; i >= 0; i--)
+		if (this->num[i] >= a.num[i])return false;
+	return true;
+}
+bool number::operator==(number a) {
+	if (this->len != a.len)return false;
+	for (int i = static_cast<unsigned __int64>(a.len) - 1; i >= 0; i--)
+		if (this->num[i] != a.num[i])return false;
+	return true;
+}
+bool number::operator!=(number a) {
+	return !(*this == a);
+}
+bool number::operator>(int a) {
+	number b;
+	b = a;
+	return *this > b;
+}
+bool number::operator<(int a) {
+	number b;
+	b = a;
+	return *this < b;
+}
+bool number::operator==(int a) {
+	number b;
+	b = a;
+	return *this == b;
+}
+bool number::operator!=(int a) {
+	number b;
+	b = a;
+	return *this != b;
 }
