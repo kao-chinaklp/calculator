@@ -172,6 +172,15 @@ real real::operator^(real b) {
 	}
 	return c;
 }
+real real::radical(real b) {
+	real a, c;
+	a = *this;
+	c = b.numerator;
+	a = a ^ c;
+	a.numerator = a.numerator.radical(b.denominator);
+	a.denominator = a.denominator.radical(b.denominator);
+	a.simplification();
+}
 void real::operator++(int) {
 	this->numerator = this->denominator + this->numerator;
 	if (!this->numerator.negative)
@@ -216,11 +225,14 @@ void real::operator--(int) {
 		}
 	this->simplification();
 }
-real real::operator=(real a) {
+void real::operator=(real a) {
 	this->denominator = a.denominator;
 	this->negative = a.negative;
 	this->numerator = a.numerator;
-	return *this;
+}
+void real::operator=(number a) {
+	this->denominator = 1;
+	this->numerator = a;
 }
 void real::operator=(double a) {
 	string s, t;

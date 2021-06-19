@@ -17,9 +17,11 @@ public:
 	real operator*(real b);
 	real operator/(real b);
 	real operator^(real b);
+	real radical(real b);//¿ª¸ùºÅ
 	void operator++(int);
 	void operator--(int);
-	real operator=(real a);
+	void operator=(real a);
+	void operator=(number a);
 	void operator=(double a);
 	void operator+=(real b);
 	void operator-=(real b);

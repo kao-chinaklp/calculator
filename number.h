@@ -34,6 +34,7 @@ public:
 	number operator/(number b);
 	number operator%(number b);
 	number operator^(number b);
+	number radical(number b);//¿ª¸ùºÅ
 	void operator++(int);
 	void operator--(int);
 	void operator+=(number b);

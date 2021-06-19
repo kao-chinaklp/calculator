@@ -159,8 +159,9 @@ number number::operator^(number b) {
 	}
 	return c;
 }
-number radical(number a, number b) {
-	number c;
+number number::radical(number b) {
+	number a, c;
+	a = *this;
 	c.len = 1;
 	c.num.push_back(0);
 	while (a > (c ^ b)) c++;
